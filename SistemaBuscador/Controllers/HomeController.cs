@@ -22,6 +22,11 @@ namespace SistemaBuscador.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Login(LoginViewModel model) 
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
