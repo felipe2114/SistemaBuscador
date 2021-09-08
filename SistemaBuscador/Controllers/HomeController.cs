@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SistemaBuscador.Models;
+using SistemaBuscador.Repositories;
 
 namespace SistemaBuscador.Controllers
 {
@@ -25,13 +26,20 @@ namespace SistemaBuscador.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel model) 
         {
+            var repo = new LoginRepository();
             if (!ModelState.IsValid) 
             {
-                return View("Index",model);
-            }
-            return View("Privacy");
-        }
+                if (repo.UserExist(model.Ususario, model.Password))
+                {
+                    return View("Privacy");
 
+                }
+                
+            }
+            return View("Index", model);        
+            
+        }
+        
         public IActionResult Privacy()
         {
             return View();
