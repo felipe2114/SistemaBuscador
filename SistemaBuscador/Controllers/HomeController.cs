@@ -32,10 +32,12 @@ namespace SistemaBuscador.Controllers
                 if (repo.UserExist(model.Ususario, model.Password))
                 {
                     return View("Privacy");
-
                 }
-                
-            }
+                else 
+                {
+                    ModelState.AddModelError(string.Empty, "El usuario o contraseña no es valido");
+                }
+            } 
             return View("Index", model);        
             
         }
@@ -43,7 +45,7 @@ namespace SistemaBuscador.Controllers
         public IActionResult Privacy()
         {
             return View();
-        }
+        } 
 
         public IActionResult Prueba() 
         {
