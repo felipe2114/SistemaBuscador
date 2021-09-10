@@ -13,12 +13,15 @@ namespace SistemaBuscador.Repositories
             bool result = false;
             string connectionString = "server=localhost\\SQLEXPRESS; database=PRO402BD;Integrated Security=true; ";
             using SqlConnection sql = new SqlConnection(connectionString);
-            using SqlCommand cmd = new SqlCommand("select count (*) from usuarios where usuario = '"+usuario+"' and password= '"+password+"'", sql);
+            using SqlCommand cmd = new SqlCommand("sp_check_user", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@user", usuario));
+            cmd.Parameters.Add(new SqlParameter("@password", password));
             sql.Open();
             int bdResult = (int) cmd.ExecuteScalar();
             if (bdResult > 0) 
             { 
-                result = true;
+                result = true; 
             }
             
             return result;

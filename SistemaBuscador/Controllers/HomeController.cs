@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SistemaBuscador.Models;
@@ -27,10 +28,13 @@ namespace SistemaBuscador.Controllers
         public IActionResult Login(LoginViewModel model) 
         {
             var repo = new LoginRepository();
-            if (!ModelState.IsValid) 
+            if (ModelState.IsValid) 
             {
                 if (repo.UserExist(model.Ususario, model.Password))
                 {
+                    Guid sessionId = Guid.NewGuid();
+                    HttpContext.Session.SetString("sessionId", sessionId.ToString());
+                    Response.Cookies.Append("sessionId", sessionId.ToString());
                     return View("Privacy");
                 }
                 else 
@@ -44,6 +48,11 @@ namespace SistemaBuscador.Controllers
         
         public IActionResult Privacy()
         {
+            string sessionId = Request.Cookies["sessionId"];
+            if (string.IsNullOrEmpty(sessionId) || !sessionId.Equals(HttpContext.Session.GetString("sessionId"))) 
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         } 
 
